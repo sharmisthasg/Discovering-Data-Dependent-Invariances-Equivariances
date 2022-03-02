@@ -6,16 +6,24 @@ import logging
 
 # DeepSets Model
 class DeepSets(torch.nn.Module):
-    def __init__(self,D):
+    def __init__(self):
         super(DeepSets, self).__init__()
-        self.layer1 = torch.nn.Linear(D,D,bias=False)
-        torch.nn.init.kaiming_normal_(self.layer1.weight)
+        self.l1 = torch.nn.Linear(1, 10)
+        torch.nn.init.kaiming_normal_(self.l1.weight)
+        self.bn1 = torch.nn.BatchNorm1d(10)
+        self.l2 = torch.nn.Linear(10, 1)
+        torch.nn.init.kaiming_normal_(self.l2.weight)
+        self.bn2 = torch.nn.BatchNorm1d(1)
 
     def forward(self,x):
-        layer1_op = self.layer1(x)
-        feat_sum = torch.sum(layer1_op,dim=1)
-        prediction = F.relu(feat_sum)
-        return prediction
+        x_expanded = x.reshape((x.shape[0]*x.shape[1],1))
+        features = F.relu(self.bn1(self.l1(x_expanded)))
+        features = F.relu(self.bn2(self.l2(features)))
+        features = features.reshape((x.shape[0], x.shape[1]))
+        feat_sum = torch.sum(features, dim=1)
+        feat_sum = feat_sum.reshape((feat_sum.shape[0], 1))
+        y_pred = F.relu(feat_sum)
+        return y_pred
 
 
 # loading dataset
@@ -35,7 +43,7 @@ def load_data(data_dir,set_size):
 
 
 # train module
-def train(model, optimizer, criterion, X, y):
+def train(model,optimizer, criterion, X, y):
     y_pred = model(X).reshape(y.size())  # forward step
     loss = criterion(y_pred,y)
     loss.backward()  # backprop (compute gradients)
@@ -80,15 +88,16 @@ def main():
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-    lr = 1e-2  # Learning rate
+    lr = 1e-2 # Learning rate
 
-    model = DeepSets(set_size).to(device)
+    model = DeepSets().to(device)
 
     criterion = torch.nn.L1Loss(reduction='mean')  # loss function
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)  # optimizer
 
     # training the model for 1000 epochs
     model.train()
+
     optimum_training_loss = float('inf')
     for epoch in range(1000):
         training_loss = train(model,optimizer,criterion,X_train,y_train)
@@ -104,14 +113,6 @@ def main():
     evaluation = test(model, X_test, y_test, criterion)
     print(f"\n[TEST_LOSS]: {evaluation.item():.6f}")
     logger.info(f"\n[TEST_LOSS]: {evaluation.item():.6f}")
-    print("Model parameters are: ")
-    for name, param in model.named_parameters():
-        if param.requires_grad:
-            print(name, param.data)
-            print('\nSumming up the final 10x10 weight matrix along dimension=1:')
-            print(torch.sum(param.data,dim=0))
-            logger.info('\nSumming up the final 10x10 weight matrix along dimension=1:')
-            logger.info(torch.sum(param.data,dim=0))
 
 
 if __name__ == '__main__':
