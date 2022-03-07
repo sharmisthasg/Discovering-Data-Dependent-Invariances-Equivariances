@@ -69,7 +69,7 @@ def main():
         break
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    model = models.resnet18(pretrained=False)
+    model = models.resnet50(pretrained=False)
     model.conv1 = nn.Conv2d(1, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)  #only 1 channel greyscale images
     model.fc = nn.Linear(model.fc.in_features, 10)
     model = model.to(device)
@@ -80,7 +80,7 @@ def main():
 
     # training-phase
     optimum_loss = float('inf')
-    for epoch in range(20):
+    for epoch in range(10):
         loss = train(model,criterion,optimizer,train_loader,device)
         print(f'Epoch {epoch}: Training Loss {loss}')
         logger.info(f'Epoch {epoch}: Training Loss {loss}')

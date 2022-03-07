@@ -10,12 +10,18 @@ def main():
         root="./",
         train=True,
         download=True,
-        transform=torchvision.transforms.ToTensor())
+        transform=torchvision.transforms.Compose([
+                  torchvision.transforms.Resize((100,100)),
+                  torchvision.transforms.ToTensor()
+        ]))
     test = torchvision.datasets.MNIST(
         root="./",
         train=False,
         download=True,
-        transform=torchvision.transforms.ToTensor())
+        transform=torchvision.transforms.Compose([
+                  torchvision.transforms.Resize((100,100)),
+                  torchvision.transforms.ToTensor()
+        ]))
 
     # Random split with fixed seed
     train_set_size = int(len(train) * 0.8)
