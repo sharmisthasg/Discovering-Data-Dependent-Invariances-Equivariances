@@ -82,7 +82,7 @@ def test(model, test_loader, device):
 def main():
     print("Entering main")
     torch.manual_seed(696)
-    logging.basicConfig(filename="baseline_custom.log",
+    logging.basicConfig(filename="reports/baseline_threelayer.log",
                         format='%(asctime)s %(message)s',
                         filemode='w')
     logger = logging.getLogger()
@@ -132,12 +132,12 @@ def main():
         logger.info(f'Epoch {epoch}: Training Loss {loss}')
         if loss < optimum_loss:
             optimum_loss = loss
-            torch.save(model.state_dict(), "baseline_custom" + ".pt")
+            torch.save(model.state_dict(), "models/baseline_threelayer" + ".pt")
 
     # test-phase
     print('\nRESULTS ON TEST DATA:')
     logger.info('\nRESULTS ON TEST DATA:')
-    model.load_state_dict(torch.load("baseline_custom" + ".pt"))
+    model.load_state_dict(torch.load("models/baseline_threelayer" + ".pt"))
     precision, recall, f1, accuracy = test(model, test_loader, device)
     print_scores(precision, recall, f1, accuracy, len(test_loader), logger)
 
