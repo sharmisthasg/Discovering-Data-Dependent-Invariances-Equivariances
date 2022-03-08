@@ -16,19 +16,21 @@ class baseline(nn.Module):
         super(baseline, self).__init__()
 
         self.conv_layers = nn.Sequential(
-            nn.Conv2d(1, 6, kernel_size=3),
+            nn.Conv2d(1, 1, kernel_size=4, stride=2, bias=False),
             nn.ReLU(),
-            nn.Conv2d(6, 12, kernel_size=3),
-            nn.Dropout(),
+            nn.Conv2d(1, 1, kernel_size=4, stride=2, bias=False),
             nn.ReLU(),
         )
         self.fc_layers = nn.Sequential(
-            nn.Linear(12 * 96 * 96, 10),
+            nn.Linear(1 * 23 * 23, 10),
+            # nn.Softmax(dim=1)
         )
 
     def forward(self, x):
         x = self.conv_layers(x)
-        x = x.view(-1, 12 * 96 * 96)
+        # print("conv output", x.shape)
+        x = x.view(-1, 1 * 23 * 23)
+        # print("fc input", x.shape)
         x = self.fc_layers(x)
         return x
 
@@ -80,7 +82,7 @@ def test(model, test_loader, device):
 def main():
     print("Entering main")
     torch.manual_seed(696)
-    logging.basicConfig(filename="./reports/baseline.log",
+    logging.basicConfig(filename="baseline_custom.log",
                         format='%(asctime)s %(message)s',
                         filemode='w')
     logger = logging.getLogger()
@@ -116,26 +118,26 @@ def main():
     # out = model.forward(sample)
     # print(f"* Input tensor size: {input_size}, \n* Output tensor size: {out.size()}")
 
-    lr = 1e-2
+    lr = 1e-4
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 
     # training-phase
     optimum_loss = float('inf')
     print("Start Training")
-    for epoch in range(10):
+    for epoch in range(20):
         print("Epoch", epoch)
         loss = train(model, criterion, optimizer, train_loader, device)
         print(f'Epoch {epoch}: Training Loss {loss}')
         logger.info(f'Epoch {epoch}: Training Loss {loss}')
         if loss < optimum_loss:
             optimum_loss = loss
-            torch.save(model.state_dict(), "models/baseline" + ".pt")
+            torch.save(model.state_dict(), "baseline_custom" + ".pt")
 
     # test-phase
     print('\nRESULTS ON TEST DATA:')
     logger.info('\nRESULTS ON TEST DATA:')
-    model.load_state_dict(torch.load("models/baseline" + ".pt"))
+    model.load_state_dict(torch.load("baseline_custom" + ".pt"))
     precision, recall, f1, accuracy = test(model, test_loader, device)
     print_scores(precision, recall, f1, accuracy, len(test_loader), logger)
 
