@@ -20,16 +20,18 @@ class baseline(nn.Module):
             nn.ReLU(),
             nn.Conv2d(1, 1, kernel_size=4, stride=2, bias=False),
             nn.ReLU(),
+            nn.Conv2d(1, 1, kernel_size=4, stride=2, bias=False),
+            nn.ReLU(),
         )
         self.fc_layers = nn.Sequential(
-            nn.Linear(1 * 23 * 23, 10),
+            nn.Linear(1 * 10 * 10, 10),
             # nn.Softmax(dim=1)
         )
 
     def forward(self, x):
         x = self.conv_layers(x)
         # print("conv output", x.shape)
-        x = x.view(-1, 1 * 23 * 23)
+        x = x.view(-1, 1 * 10 * 10)
         # print("fc input", x.shape)
         x = self.fc_layers(x)
         return x
@@ -82,7 +84,7 @@ def test(model, test_loader, device):
 def main():
     print("Entering main")
     torch.manual_seed(696)
-    logging.basicConfig(filename="reports/baseline_custom.log",
+    logging.basicConfig(filename="reports/baseline_fourlayer.log",
                         format='%(asctime)s %(message)s',
                         filemode='w')
     logger = logging.getLogger()
@@ -132,12 +134,12 @@ def main():
         logger.info(f'Epoch {epoch}: Training Loss {loss}')
         if loss < optimum_loss:
             optimum_loss = loss
-            torch.save(model.state_dict(), "models/baseline_custom" + ".pt")
+            torch.save(model.state_dict(), "models/baseline_fourlayer" + ".pt")
 
     # test-phase
     print('\nRESULTS ON TEST DATA:')
     logger.info('\nRESULTS ON TEST DATA:')
-    model.load_state_dict(torch.load("models/baseline_custom" + ".pt"))
+    model.load_state_dict(torch.load("models/baseline_fourlayer" + ".pt"))
     precision, recall, f1, accuracy = test(model, test_loader, device)
     print_scores(precision, recall, f1, accuracy, len(test_loader), logger)
 
