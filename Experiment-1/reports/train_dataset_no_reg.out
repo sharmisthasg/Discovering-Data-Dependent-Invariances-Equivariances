@@ -1,0 +1,4 @@
+Best training loss for is 0.0007893484504674849
+Best training model parameters: tensor([[1.0008, 0.9993, 1.0022, 1.0013, 0.9995, 0.9996, 1.0002, 1.0013, 0.9993,
+         0.9999]], device='cuda:0', dtype=torch.float64)
+Test loss of best training model is 0.001701355746715721
