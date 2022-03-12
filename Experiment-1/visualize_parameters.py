@@ -45,7 +45,7 @@ def main():
     model = torch.nn.Sequential(torch.nn.Linear(D, D, bias=False), torch.nn.ReLU(), torch.nn.Linear(D, C, bias=False), torch.nn.ReLU())
     model.to(device)
     # give the correct path of the model you want to visualize
-    current_model = "models/one_hidden_layer/best_training"
+    current_model = "models/one_hidden_layer/best_validation"
     model.load_state_dict(torch.load(current_model + '.pt'))
 
     for name, parameter in model.named_parameters():
@@ -60,7 +60,7 @@ def main():
             plt.imshow(parameter.cpu().detach().numpy().reshape((parameter.shape[0],1)), aspect='auto')
             print(matrix_rank(parameter.cpu().detach().numpy()))
         plt.show()
-        plt.savefig("best_training.png")
+        plt.savefig("heatmaps/one_hidden_layer/best_validation_" + str(name) + "_reg.png")
 
 if __name__ == '__main__':
     main()
