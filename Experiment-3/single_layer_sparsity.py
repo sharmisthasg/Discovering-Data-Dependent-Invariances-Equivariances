@@ -24,18 +24,12 @@ def f(a):
 
 
 def custom_loss_fn(criterion, y_pred, y, hp, model):
-    # all_pairs = list(itertools.combinations([x.data for x in model.linear.weight], 2))
-    # combinations = list(map(f, all_pairs))
-    weights = torch.empty(0)
-    for x in model.linear.weight:
-        weights = torch.cat((weights,x.data),0)
-    all_pairs = list(itertools.combinations(list(weights), 2))
-    combinations = list(map(f, all_pairs))
-    # print(len(all_pairs))
-    return criterion(y_pred, y) + hp*sum(combinations)
+    mask = torch.where(model.linear.weight > 0, 1, -1)
+    return criterion(y_pred, y) + hp*(torch.sum(mask))
 
 
-def train(model,criterion,optimizer,train_loader,device,hps):
+def train(model,criterion,optimizer,train_loader,device,hps,beta):
+    threshold = torch.nn.Threshold(beta*hps,0)
     model.train()
     total_loss = 0
     for batch_idx, (data,target) in enumerate(train_loader):
@@ -45,6 +39,11 @@ def train(model,criterion,optimizer,train_loader,device,hps):
         loss = custom_loss_fn(criterion, prediction, target, hps, model)
         loss.backward()
         optimizer.step()
+        with torch.no_grad():
+            abs_weights = torch.abs(model.linear.weight)
+            abs_weights = threshold(abs_weights)
+            mask = torch.where(abs_weights > 0, 1, 0)
+            model.linear.weight *= mask
         total_loss += loss.item()
 
     return total_loss
@@ -82,7 +81,7 @@ def test(model,test_loader,device):
 
 def main():
     torch.manual_seed(696)
-    logging.basicConfig(filename="reports/1_layer_0-1_MLP.log",
+    logging.basicConfig(filename="reports/1_layer_sparse.log",
                         format='%(asctime)s %(message)s',
                         filemode='w')
     logger = logging.getLogger()
@@ -108,14 +107,15 @@ def main():
     lr = 2e-6
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    hps = 1e-6
+    hps = 1e-4
+    beta = 10
     optimum_loss = float('inf')
     optimum_val_loss = float('inf')
 
     # training-phase
     print('Training ....')
-    for epoch in range(15):
-        loss = train(model,criterion,optimizer,train_loader,device,hps)
+    for epoch in range(50):
+        loss = train(model,criterion,optimizer,train_loader,device,hps,beta)
         val_loss = validation(model, criterion, validation_loader, device)
         print(f'Epoch {epoch}: Training Loss {loss} Validation Loss {val_loss}')
         logger.info(f'Epoch {epoch}: Training Loss {loss} Validation Loss {val_loss}')
@@ -123,13 +123,13 @@ def main():
             optimum_loss = loss
             optimum_val_loss = val_loss
             print('updating saved model')
-            torch.save(model.state_dict(), "models/1_layer_0-1_MLP" + ".pt")
+            torch.save(model.state_dict(), "models/1_layer_sparse" + ".pt")
 
     # test-phase
     print('Testing ...')
     print('\nRESULTS ON TEST DATA:')
     logger.info('\nRESULTS ON TEST DATA:')
-    model.load_state_dict(torch.load("models/1_layer_0-1_MLP" + ".pt"))
+    model.load_state_dict(torch.load("models/1_layer_sparse" + ".pt"))
     precision, recall, f1, accuracy = test(model, test_loader, device)
     print_scores(precision, recall, f1, accuracy, len(test_loader),logger)
 
