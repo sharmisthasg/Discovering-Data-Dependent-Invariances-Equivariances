@@ -1,0 +1,131 @@
+Train data set: 48000
+Test data set: 10000
+Valid data set: 12000
+Image batch dimensions: torch.Size([256, 1, 28, 28])
+Image label dimensions: torch.Size([256])
+----------------------------------------------------------------
+        Layer (type)               Output Shape         Param #
+================================================================
+           Flatten-1                 [256, 784]               0
+            Linear-2                 [256, 128]         100,352
+              ReLU-3                 [256, 128]               0
+            Linear-4                  [256, 10]           1,280
+================================================================
+Total params: 101,632
+Trainable params: 101,632
+Non-trainable params: 0
+----------------------------------------------------------------
+Input size (MB): 0.77
+Forward/backward pass size (MB): 2.05
+Params size (MB): 0.39
+Estimated Total Size (MB): 3.20
+----------------------------------------------------------------
+None
+Training ....
+Epoch 0: Training Loss 366.15637946128845 Validation Loss 52.229713439941406
+updating saved model
+Epoch 1: Training Loss 199.3512066602707 Validation Loss 31.327110290527344
+updating saved model
+Epoch 2: Training Loss 148.83977216482162 Validation Loss 24.615285873413086
+updating saved model
+Epoch 3: Training Loss 129.42722165584564 Validation Loss 21.529796600341797
+updating saved model
+Epoch 4: Training Loss 119.08261054754257 Validation Loss 19.802227020263672
+updating saved model
+Epoch 5: Training Loss 112.42191126942635 Validation Loss 18.696786880493164
+updating saved model
+Epoch 6: Training Loss 107.60334712266922 Validation Loss 17.96893310546875
+updating saved model
+Epoch 7: Training Loss 103.96358326077461 Validation Loss 17.404626846313477
+updating saved model
+Epoch 8: Training Loss 100.98442387580872 Validation Loss 16.996379852294922
+updating saved model
+Epoch 9: Training Loss 98.43517872691154 Validation Loss 16.605960845947266
+updating saved model
+Epoch 10: Training Loss 96.12488040328026 Validation Loss 16.295053482055664
+updating saved model
+Epoch 11: Training Loss 94.07830289006233 Validation Loss 15.986886978149414
+updating saved model
+Epoch 12: Training Loss 92.25364211201668 Validation Loss 15.747977256774902
+updating saved model
+Epoch 13: Training Loss 90.48302727937698 Validation Loss 15.488377571105957
+updating saved model
+Epoch 14: Training Loss 88.899579256773 Validation Loss 15.279284477233887
+updating saved model
+Epoch 15: Training Loss 87.22947311401367 Validation Loss 15.022924423217773
+updating saved model
+Epoch 16: Training Loss 85.76849871873856 Validation Loss 14.7872314453125
+updating saved model
+Epoch 17: Training Loss 84.34315150976181 Validation Loss 14.568726539611816
+updating saved model
+Epoch 18: Training Loss 82.95135694742203 Validation Loss 14.427581787109375
+updating saved model
+Epoch 19: Training Loss 81.56228518486023 Validation Loss 14.166362762451172
+updating saved model
+Epoch 20: Training Loss 80.24125063419342 Validation Loss 13.958843231201172
+updating saved model
+Epoch 21: Training Loss 78.95984554290771 Validation Loss 13.747857093811035
+updating saved model
+Epoch 22: Training Loss 77.7129123210907 Validation Loss 13.549270629882812
+updating saved model
+Epoch 23: Training Loss 76.57901754975319 Validation Loss 13.36140251159668
+updating saved model
+Epoch 24: Training Loss 75.37477487325668 Validation Loss 13.178520202636719
+updating saved model
+Epoch 25: Training Loss 74.2327410876751 Validation Loss 13.042152404785156
+updating saved model
+Epoch 26: Training Loss 73.14329835772514 Validation Loss 12.840860366821289
+updating saved model
+Epoch 27: Training Loss 72.12135869264603 Validation Loss 12.634272575378418
+updating saved model
+Epoch 28: Training Loss 71.10255321860313 Validation Loss 12.47130298614502
+updating saved model
+Epoch 29: Training Loss 70.07750961184502 Validation Loss 12.346457481384277
+updating saved model
+Epoch 30: Training Loss 69.09187063574791 Validation Loss 12.217097282409668
+updating saved model
+Epoch 31: Training Loss 68.11750215291977 Validation Loss 12.0097074508667
+updating saved model
+Epoch 32: Training Loss 67.23611557483673 Validation Loss 11.848126411437988
+updating saved model
+Epoch 33: Training Loss 66.42414182424545 Validation Loss 11.724059104919434
+updating saved model
+Epoch 34: Training Loss 65.48937752842903 Validation Loss 11.58216381072998
+updating saved model
+Epoch 35: Training Loss 64.73450163006783 Validation Loss 11.438846588134766
+updating saved model
+Epoch 36: Training Loss 63.96048000454903 Validation Loss 11.33912181854248
+updating saved model
+Epoch 37: Training Loss 63.15915688872337 Validation Loss 11.170584678649902
+updating saved model
+Epoch 38: Training Loss 62.449684739112854 Validation Loss 11.052403450012207
+updating saved model
+Epoch 39: Training Loss 61.66455456614494 Validation Loss 10.942536354064941
+updating saved model
+Epoch 40: Training Loss 61.037088483572006 Validation Loss 10.799880981445312
+updating saved model
+Epoch 41: Training Loss 60.361567944288254 Validation Loss 10.711959838867188
+updating saved model
+Epoch 42: Training Loss 59.70600405335426 Validation Loss 10.612236976623535
+updating saved model
+Epoch 43: Training Loss 59.09305365383625 Validation Loss 10.493387222290039
+updating saved model
+Epoch 44: Training Loss 58.498047545552254 Validation Loss 10.415142059326172
+updating saved model
+Epoch 45: Training Loss 57.86693501472473 Validation Loss 10.332903861999512
+updating saved model
+Epoch 46: Training Loss 57.296605467796326 Validation Loss 10.20417308807373
+updating saved model
+Epoch 47: Training Loss 56.768223240971565 Validation Loss 10.128211975097656
+updating saved model
+Epoch 48: Training Loss 56.214497327804565 Validation Loss 10.051669120788574
+updating saved model
+Epoch 49: Training Loss 55.72032895684242 Validation Loss 9.954290390014648
+updating saved model
+Testing ...
+
+RESULTS ON TEST DATA:
+precision: 0.9671834509576444
+recall: 0.9678169082931477
+F1: 0.9670032815275544
+accuracy: 0.96875
