@@ -34,12 +34,30 @@ def main():
     # plt.imshow(zoomed, aspect='auto')
     # plt.show()
 
+    #correlation
+    coeffdict = {}
+    for i in range(128):
+        for j in range(28):
+            if i!=j:
+                corrmatrix = np.corrcoef(layer1[i], layer1[j])
+                coeffdict[str(i)+", "+str(j)] = corrmatrix[0][1]
+    # print(coeffdict)
+    values = list(coeffdict.values())
+    maxcorr = max(values)
+    print("Maximum Correlation", maxcorr)
+    items = coeffdict.items()
+    for key, value in items:
+        if value == maxcorr:
+            print("Corresponding Rows: ", key)
+
     #enter rows to compare
     rows = input("Enter indices of rows separated by comma").split(",")
     for row in rows:
         plt.plot(range(784), layer1[int(row)], label="row"+row)
     plt.legend()
+    plt.savefig('row_comparisons/H_V_block_MNIST_'+str(rows)+'.png')
     plt.show()
+
 
     # first_row = torch.clone(model.linear_1.weight[0])
     # second_row = torch.clone(model.linear_1.weight[1])
