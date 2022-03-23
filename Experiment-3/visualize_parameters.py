@@ -34,7 +34,7 @@ def main():
     # plt.imshow(zoomed, aspect='auto')
     # plt.show()
 
-    #pick two rows to compare
+    #enter rows to compare
     rows = input("Enter indices of rows separated by comma").split(",")
     for row in rows:
         plt.plot(range(784), layer1[int(row)], label="row"+row)
