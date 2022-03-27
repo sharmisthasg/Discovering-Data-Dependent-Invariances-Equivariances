@@ -95,6 +95,8 @@ def main():
         validation_loss = test(model,criterion,X_validation,y_validation,validation=True)
         print(f'training loss: {training_loss}, validation loss:{validation_loss}')
         if training_loss < optimum_training_loss and validation_loss < optimum_validation_loss:
+            optimum_validation_loss = validation_loss
+            optimum_training_loss = training_loss
             torch.save(model.state_dict(), "./models/1D_model" + ".pt")
 
     model.load_state_dict(torch.load("./models/1D_model" + ".pt"))
