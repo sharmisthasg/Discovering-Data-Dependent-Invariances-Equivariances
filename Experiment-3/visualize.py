@@ -7,7 +7,7 @@ from collections import OrderedDict
 import seaborn as sns
 import numpy as np
 import torch.nn.functional as F
-from torchsummary import summary
+#from torchsummary import summary
 
 
 class Model1D(torch.nn.Module):
@@ -37,9 +37,9 @@ def main():
     weight2 = model.weight2
 
     for category in range(5):
-        ax = sns.heatmap(weight1[category].detach().numpy().transpose())
+        ax = sns.heatmap(weight1[category].detach().numpy())
         plt.title('class: ' + str(category))
-        plt.show()
+        plt.savefig("Weight Heatmaps/1D_2_model_class_" + str(category) + ".png")
 
     max_correlation = {}
     for i in range(5):
@@ -48,8 +48,12 @@ def main():
             k = [m for m in range(10)]
             k.remove(row1)
             for row2 in k:
-                corrmatrix = np.corrcoef(weight1[i][row1].detach().numpy(), weight1[i][row2].detach().numpy())
-                coeffdict[str(row1) + ", " + str(row2)] = corrmatrix[0][1]
+                coeffdict[str(row1) + ", " + str(row2)] = -float('inf')
+                for j in range(10):
+                    temp = weight1[i][row2].detach().numpy()
+                    temp = np.hstack((temp[-j:], temp[:-j]))
+                    corrmatrix = np.corrcoef(weight1[i][row1].detach().numpy(), temp)
+                    coeffdict[str(row1) + ", " + str(row2)] = max(coeffdict[str(row1) + ", " + str(row2)], corrmatrix[0][1])
         print(f'Class: {i}')
         values = list(coeffdict.values())
         maxcorr = max(values)
@@ -70,7 +74,7 @@ def main():
         plt.plot(range(10), row2, label='row-'+str(max_correlation[category][1]))
         plt.legend()
         plt.title('Correlation coeff for class ' + str(category) + ': ' + str(max_correlation[category][2]))
-        plt.show()
+        plt.savefig("Weight Heatmaps/1D_2_model_coeff_class_" + str(category) + ".png")
 
 
 if __name__ == '__main__':
