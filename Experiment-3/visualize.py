@@ -40,7 +40,7 @@ def main():
         ax = sns.heatmap(weight1[category].detach().numpy())
         plt.title('class: ' + str(category))
         plt.savefig("Weight Heatmaps/1D_2_model_class_" + str(category) + ".png")
-
+        plt.clf()
     max_correlation = {}
     for i in range(5):
         coeffdict = {}
@@ -75,7 +75,7 @@ def main():
         plt.legend()
         plt.title('Correlation coeff for class ' + str(category) + ': ' + str(max_correlation[category][2]))
         plt.savefig("Weight Heatmaps/1D_2_model_coeff_class_" + str(category) + ".png")
-
+        plt.clf()
 
 if __name__ == '__main__':
     main()
