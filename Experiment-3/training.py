@@ -14,18 +14,16 @@ from torch.nn import functional as F
 class Model1D(torch.nn.Module):
     def __init__(self):
         super(Model1D, self).__init__()
-        self.weight1 = torch.nn.Parameter(torch.randn(5,10,10))
+        weight = torch.randn(5,10,10)
+        self.weight1 = torch.nn.Parameter(weight)
         torch.nn.init.kaiming_normal_(self.weight1)
-        self.weight2 = torch.nn.Parameter(torch.randn(50,5))
-        torch.nn.init.kaiming_normal_(self.weight2)
 
     def forward(self,x):
         layer1_op = torch.matmul(x,self.weight1)  # (N,10) x (10,10,5) = (5, N, 10)
-        layer1_op = F.relu(layer1_op)
+        layer1_op = torch.sigmoid(layer1_op)
         layer1_op = torch.transpose(layer1_op,0,1)  # (5, N, 10) --> (N, 5, 10)
         dim0, dim1, dim2 = layer1_op.shape
-        layer2_op = layer1_op.reshape((dim0, dim1 * dim2))  # (N, 5, 10) --> (N, 50)
-        prediction = torch.matmul(layer2_op,self.weight2)  # (N, 50) x (50, 5) --> (N, 5)
+        prediction = torch.sum(layer1_op, dim=2).reshape(dim0,dim1)  # (N, 50) x (50, 5) --> (N, 5)
         return prediction
 
 
@@ -90,7 +88,7 @@ def main():
     optimum_training_loss = float('inf')
     optimum_validation_loss = float('inf')
 
-    for epoch in range(100):
+    for epoch in range(500):
         training_loss = train(model,criterion,optimizer,X_train,y_train)
         validation_loss = test(model,criterion,X_validation,y_validation,validation=True)
         print(f'training loss: {training_loss}, validation loss:{validation_loss}')
