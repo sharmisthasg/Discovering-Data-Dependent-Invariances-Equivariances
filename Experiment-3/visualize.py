@@ -83,20 +83,22 @@ def main():
             for row2 in k:
                 #coeffdict[str(row1) + ", " + str(row2)] = -float('inf')
                 shifts = []
-                correlations = []
+                #correlations = []
+                l1_diffs = []
                 for j in range(10):
                     temp = weight1[i][row2].detach().numpy()
                     temp = np.hstack((temp[-j:], temp[:-j]))
                     corrmatrix = np.corrcoef(weight1[i][row1].detach().numpy(), temp)
                     correlation = corrmatrix[0][1]
                     shifts.append(j)
-                    correlations.append(correlation)
+                    #correlations.append(correlation)
+                    l1_diffs.append(np.linalg.norm(weight1[i][row1].detach().numpy()-temp))
                     #coeffdict[str(row1) + ", " + str(row2)] = max(coeffdict[str(row1) + ", " + str(row2)], corrmatrix[0][1])
-                axs[row2].scatter(shifts, correlations)
-                axs[row2].set_title("Row {} vs Row {} correlations vs shifts".format(row1, row2))
-                print("Best correltion for row {} and row {} is {} for shift {}".format(row1, row2, max(correlations), correlations.index(max(correlations))))
-            fig.suptitle("Shift vs Correlation for row {}".format(row1))
-            plt.savefig("Weight Heatmaps/1D_model_sparsity_corr_class_" + str(i) + "_row_" + str(row1)+".png")
+                axs[row2].scatter(shifts, l1_diffs)
+                axs[row2].set_title("Row {} vs Row {} l1_diff vs shifts".format(row1, row2))
+                print("Best l1_diff for row {} and row {} is {} for shift {}".format(row1, row2, max(l1_diffs), l1_diffs.index(max(l1_diffs))))
+            fig.suptitle("Shift vs L1 difference for row {}".format(row1))
+            plt.savefig("Weight Heatmaps/1D_model_sparsity_l1_class_" + str(i) + "_row_" + str(row1)+".png")
             plt.clf()
         print(f'Class: {i}')
         '''values = list(coeffdict.values())
