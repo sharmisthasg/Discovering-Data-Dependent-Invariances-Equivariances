@@ -10,21 +10,21 @@ import torch.nn.functional as F
 #from torchsummary import summary
 
 
-#class Model1D(torch.nn.Module):
-#    def __init__(self):
-#        super(Model1D, self).__init__()
-#        weight = torch.randn(5,10,10)
-#        self.weight1 = torch.nn.Parameter(weight)
-#        torch.nn.init.kaiming_normal_(self.weight1)
+'''class Model1D(torch.nn.Module):
+    def __init__(self):
+        super(Model1D, self).__init__()
+        weight = torch.randn(5,10,10)
+        self.weight1 = torch.nn.Parameter(weight)
+        torch.nn.init.kaiming_normal_(self.weight1)
 
-#    def forward(self,x):
-#        layer1_op = torch.matmul(x,self.weight1)  # (N,10) x (10,10,5) = (5, N, 10)
-#        layer1_op = torch.sigmoid(layer1_op)
-#        layer1_op = torch.transpose(layer1_op,0,1)  # (5, N, 10) --> (N, 5, 10)
-#        dim0, dim1, dim2 = layer1_op.shape
-#        prediction = torch.sum(layer1_op, dim=2).reshape(dim0,dim1)  # (N, 50) x (50, 5) --> (N, 5)
-#        return prediction 
-
+    def forward(self,x):
+        layer1_op = torch.matmul(x,self.weight1)  # (N,10) x (10,10,5) = (5, N, 10)
+        layer1_op = torch.sigmoid(layer1_op)
+        layer1_op = torch.transpose(layer1_op,0,1)  # (5, N, 10) --> (N, 5, 10)
+        dim0, dim1, dim2 = layer1_op.shape
+        prediction = torch.sum(layer1_op, dim=2).reshape(dim0,dim1)  # (N, 50) x (50, 5) --> (N, 5)
+        return prediction 
+'''
 #class Model1D(torch.nn.Module):
 #    def __init__(self):
 #        super(Model1D, self).__init__()
@@ -74,31 +74,38 @@ def main():
         plt.savefig("Weight Heatmaps/1D_model_class_" + str(category) + ".png")
         plt.clf()'''
     max_correlation = {}
+    colors = ["blue", "orange", "green", "red", "purple", "brown", "pink", "gray", "olive", "cyan"]
     for i in range(5):
         coeffdict = {}
         for row1 in range(10):
             k = [m for m in range(10)]
             #k.remove(row1)
-            fig, axs = plt.subplots(ncols=1, nrows=10, figsize = (5, 40), constrained_layout=True)
+            fig = plt.figure()
+            ax1 = fig.add_subplot(111)
+            #fig, axs = plt.subplots(ncols=1, nrows=10, figsize = (5, 40), constrained_layout=True)
             for row2 in k:
                 #coeffdict[str(row1) + ", " + str(row2)] = -float('inf')
                 shifts = []
-                #correlations = []
-                l1_diffs = []
+                correlations = []
+                #l1_diffs = []
                 for j in range(10):
                     temp = weight1[i][row2].detach().numpy()
                     temp = np.hstack((temp[-j:], temp[:-j]))
                     corrmatrix = np.corrcoef(weight1[i][row1].detach().numpy(), temp)
                     correlation = corrmatrix[0][1]
                     shifts.append(j)
-                    #correlations.append(correlation)
-                    l1_diffs.append(np.linalg.norm(weight1[i][row1].detach().numpy()-temp))
+                    correlations.append(correlation)
+                    #l1_diffs.append(np.linalg.norm(weight1[i][row1].detach().numpy()-temp))
                     #coeffdict[str(row1) + ", " + str(row2)] = max(coeffdict[str(row1) + ", " + str(row2)], corrmatrix[0][1])
-                axs[row2].scatter(shifts, l1_diffs)
-                axs[row2].set_title("Row {} vs Row {} l1_diff vs shifts".format(row1, row2))
-                print("Best l1_diff for row {} and row {} is {} for shift {}".format(row1, row2, max(l1_diffs), l1_diffs.index(max(l1_diffs))))
-            fig.suptitle("Shift vs L1 difference for row {}".format(row1))
-            plt.savefig("Weight Heatmaps/1D_model_sparsity_l1_class_" + str(i) + "_row_" + str(row1)+".png")
+                #axs[row2].scatter(shifts, l1_diffs)
+                ax1.scatter(shifts, correlations, s=10, c=colors[row2], label='row '+ str(row2))
+                #ax1.set_title("Row {} vs Row {} l1_diff vs shifts".format(row1, row2))
+                print("Best correlation for row {} and row {} is {} for shift {}".format(row1, row2, max(correlations), correlations.index(max(correlations))))
+            ax1.legend(bbox_to_anchor=(1.3, 1.05))
+            ax1.set_xlabel("Shift")
+            ax1.set_ylabel("Correlation")
+            ax1.set_title("Shift vs Correlation for row {}".format(row1))
+            plt.savefig("Correlations/1D_model_sparsity/1D_model_sparsity_corr_class_" + str(i) + "_row_" + str(row1)+".png")
             plt.clf()
         print(f'Class: {i}')
         '''values = list(coeffdict.values())
