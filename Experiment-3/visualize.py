@@ -101,7 +101,7 @@ def main():
                 ax1.scatter(shifts, correlations, s=10, c=colors[row2], label='row '+ str(row2))
                 #ax1.set_title("Row {} vs Row {} l1_diff vs shifts".format(row1, row2))
                 print("Best correlation for row {} and row {} is {} for shift {}".format(row1, row2, max(correlations), correlations.index(max(correlations))))
-            ax1.legend(loc='upper center', bbox_to_anchor=(0.5, 1.1), ncol=5, fancybox=True, shadow=True)
+            ax1.legend(loc='center left', bbox_to_anchor=(1, 0.5), ncol=2, fancybox=True, shadow=True)
             ax1.set_xlabel("Shift")
             ax1.set_ylabel("Correlation")
             ax1.set_title("Shift vs Correlation for row {}".format(row1))
