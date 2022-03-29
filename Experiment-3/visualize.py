@@ -9,7 +9,6 @@ import numpy as np
 import torch.nn.functional as F
 #from torchsummary import summary
 
-
 class Model1D(torch.nn.Module):
     def __init__(self):
         super(Model1D, self).__init__()
@@ -86,26 +85,26 @@ def main():
             for row2 in k:
                 #coeffdict[str(row1) + ", " + str(row2)] = -float('inf')
                 shifts = []
-                correlations = []
-                #l1_diffs = []
+                #correlations = []
+                l1_diffs = []
                 for j in range(10):
                     temp = weight1[i][row2].detach().numpy()
                     temp = np.hstack((temp[-j:], temp[:-j]))
-                    corrmatrix = np.corrcoef(weight1[i][row1].detach().numpy(), temp)
-                    correlation = corrmatrix[0][1]
+                    #corrmatrix = np.corrcoef(weight1[i][row1].detach().numpy(), temp)
+                    #correlation = corrmatrix[0][1]
                     shifts.append(j)
-                    correlations.append(correlation)
-                    #l1_diffs.append(np.linalg.norm(weight1[i][row1].detach().numpy()-temp))
+                    #correlations.append(correlation)
+                    l1_diffs.append(np.linalg.norm(weight1[i][row1].detach().numpy()-temp))
                     #coeffdict[str(row1) + ", " + str(row2)] = max(coeffdict[str(row1) + ", " + str(row2)], corrmatrix[0][1])
                 #axs[row2].scatter(shifts, l1_diffs)
-                ax1.scatter(shifts, correlations, s=10, c=colors[row2], label='row '+ str(row2))
+                ax1.scatter(shifts, l1_diffs, s=10, c=colors[row2], label='row '+ str(row2))
                 #ax1.set_title("Row {} vs Row {} l1_diff vs shifts".format(row1, row2))
-                print("Best correlation for row {} and row {} is {} for shift {}".format(row1, row2, max(correlations), correlations.index(max(correlations))))
+                print("Best absolute difference for row {} and row {} is {} for shift {}".format(row1, row2, max(l1_diffs), l1_diffs.index(max(l1_diffs))))
             ax1.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=5, fancybox=True, shadow=True)
-            ax1.set_xlabel("Correlation vs shift for row " + str(row1))
+            ax1.set_xlabel("Absolute difference vs shift for row " + str(row1))
             #ax1.set_ylabel("Correlation")
             #plt.title("Shift vs Correlation for row {}".format(row1), y=-0.2)
-            plt.savefig("Correlations/1D_model/1D_model_corr_class_" + str(i) + "_row_" + str(row1)+".png")
+            plt.savefig("Absolute differences/1D_model/1D_model_absolute_difference_class_" + str(i) + "_row_" + str(row1)+".png")
             plt.clf()
         print(f'Class: {i}')
         '''values = list(coeffdict.values())
