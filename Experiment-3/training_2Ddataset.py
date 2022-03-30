@@ -12,23 +12,16 @@ from torch.nn import functional as F
 class Model2D(torch.nn.Module):
     def __init__(self):
         super(Model2D, self).__init__()
-        weight = torch.randn(1, 3, 100, 100)
+        weight = torch.randn(21000, 3, 100, 100)
         self.weight = torch.nn.Parameter(weight)
         torch.nn.init.kaiming_normal_(self.weight)
 
     def forward(self, x):
-        # img = torch.randn(3, 3, 10, 10)
-        # conv = F.conv2d(self.weight, img, stride=10)
-        # sum = torch.sum(conv, dim=[0, 2, 3]).reshape(1, 3)
-        # prediction = torch.sigmoid(sum)
-        # print(prediction)
-        # return prediction
-
-        x = x[0].view(1, 1, 10, 10).repeat(3, 3, 1, 1) #one image. how to get the kernel to (3, 3, 10, 10)
+        x = x.view(21000, 1, 10, 10).repeat(1, 3, 1, 1)
         output = F.conv2d(self.weight, x, stride=10)
         print(output.shape)
-        sum = torch.sum(output, dim=[0, 2, 3]).reshape(1, 3)
-        prediction = torch.sigmoid(sum)
+        s = torch.sum(output, dim=[1, 2])
+        prediction = torch.sigmoid(s)
         print(prediction)
         return prediction
 
@@ -53,6 +46,8 @@ def load_dataset():
 def train(model,criterion,optimizer,X,y):
     model.train()
     y_pred = model(X)
+    print(y_pred.shape)
+    print(y.shape)
     loss = criterion(y_pred, y)
     loss.backward()  # backprop (compute gradients)
     optimizer.step()  # update weights (gradient descent step)
@@ -72,6 +67,7 @@ def test(model,criterion,X,y,validation):
             return y_pred
 
 def main():
+    print("Entering main")
     torch.manual_seed(696)
     data = load_dataset()
 
@@ -93,6 +89,7 @@ def main():
     optimum_validation_loss = float('inf')
 
     for epoch in range(100):
+        print("Epoch: ", epoch)
         training_loss = train(model,criterion,optimizer,X_train,y_train)
         validation_loss = test(model,criterion,X_validation,y_validation,validation=True)
         print(f'training loss: {training_loss}, validation loss:{validation_loss}')
