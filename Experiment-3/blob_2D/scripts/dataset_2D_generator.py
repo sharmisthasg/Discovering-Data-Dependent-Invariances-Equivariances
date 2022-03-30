@@ -43,7 +43,7 @@ def generate_squares(num_samples, dataset_path, class_path, dim0, dim1):
 def main():
     num_samples = 10000
     num_classes = 3
-    dataset_path = "2D_dataset"
+    dataset_path = "../datasets/blob_2D_dataset"
     dim0 = 10
     dim1 = 10
     inputs = []
