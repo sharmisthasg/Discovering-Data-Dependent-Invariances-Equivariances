@@ -11,14 +11,16 @@ def main():
         train=True,
         download=True,
         transform=torchvision.transforms.Compose([
-                  torchvision.transforms.ToTensor()
+                  torchvision.transforms.ToTensor(),
+                  torchvision.transforms.RandomAffine(degrees=0, translate=(0.2, 0))
         ]))
     test = torchvision.datasets.MNIST(
         root="./",
         train=False,
         download=True,
         transform=torchvision.transforms.Compose([
-                  torchvision.transforms.ToTensor()
+                  torchvision.transforms.ToTensor(),
+                  torchvision.transforms.RandomAffine(degrees=0, translate=(0.2, 0))
         ]))
 
     # Random split with fixed seed
