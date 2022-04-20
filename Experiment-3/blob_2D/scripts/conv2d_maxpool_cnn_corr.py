@@ -76,30 +76,43 @@ def main():
     maxpool_weight3 = torch.squeeze(maxpool_weight3).detach().numpy()
 
     corr1 = -1
+    patch1 = None
     for i in range(0, 100, 10):
         for j in range(0, 100, 10):
             for k in range(i, i+6):
                 for l in range(j, j+6):
                     patch = maxpool_weight1[k:k+5, l:l+5].reshape(1, -1)
-                    #print(patch.shape, maxpool_weight1.shape)
-                    corr1 = max(corr1, np.corrcoef(patch, weight1.reshape(1, -1))[0,1])
+                    temp = np.corrcoef(patch, weight1.reshape(1, -1))[0,1]
+                    if temp > corr1:
+                        patch1 = patch
+                        corr1 = temp
 
     corr2 = -1
+    patch2 = None
     for i in range(0, 100, 10):
         for j in range(0, 100, 10):
             for k in range(i, i+6):
                 for l in range(j, j+6):
                     patch = maxpool_weight2[k:k+5, l:l+5].reshape(1, -1)
-                    corr2 = max(corr2, np.corrcoef(patch, weight2.reshape(1, -1))[0,1])
+                    temp = np.corrcoef(patch, weight2.reshape(1, -1))[0,1]
+                    if temp > corr2:
+                        patch2 = patch
+                        corr2 = temp
 
     corr3 = -1
+    patch3 = None
     for i in range(0, 100, 10):
         for j in range(0, 100, 10):
             for k in range(i, i+6):
                 for l in range(j, j+6):
                     patch = maxpool_weight3[k:k+5, l:l+5].reshape(1, -1)
-                    corr3 = max(corr3, np.corrcoef(patch, weight3.reshape(1, -1))[0,1])
-
+                    temp = np.corrcoef(patch, weight3.reshape(1, -1))[0,1]
+                    if temp > corr3:
+                        patch3 = patch
+                        corr3 = temp
+    torch.save(torch.from_numpy(patch1), '../models/conv2d_maxpool_cnn_maxcorr_patches/patch1.pt')
+    torch.save(torch.from_numpy(patch2), '../models/conv2d_maxpool_cnn_maxcorr_patches/patch2.pt')
+    torch.save(torch.from_numpy(patch3), '../models/conv2d_maxpool_cnn_maxcorr_patches/patch3.pt')
     print(f"Higest correlations for the 3 weight layers with the cnn kernels are {corr1}, {corr2}, {corr3} for class line, triangle, and square respectively")
 
 if __name__ == '__main__':
