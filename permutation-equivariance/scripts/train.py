@@ -3,7 +3,7 @@ import numpy as np
 import itertools
 import pandas as pd
 
-hps = [100, 10, 1, 1e-2, 1e-3, 1e-4, 1e-5]
+hps = [100, 10, 1, 0, 1e-2, 1e-3, 1e-4, 1e-5]
 def f(a):
     return abs(a[0] - a[1])
 def custom_loss_fn(criterion, y_pred, y, hp, linear_layers):
@@ -40,7 +40,7 @@ Y = torch.load("../dataset/labels.pt").to(device).float()
 lr = 1e-2  # Learning rate
 
 X_train = X[:int(0.8*X.shape[0]), :, :].float()
-Y_train = X[:int(0.8*Y.shape[0]), :].float()
+Y_train = Y[:int(0.8*Y.shape[0]), :].float()
 X_val = X[int(0.8*X.shape[0]):int(0.9*X.shape[0]), :, :].float()
 Y_val = Y[int(0.8*Y.shape[0]):int(0.9*Y.shape[0]), :].float()
 X_test = X[int(0.9*X.shape[0]):, :, :].float()
