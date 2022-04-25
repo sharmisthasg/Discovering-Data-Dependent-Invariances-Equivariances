@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
-import logging
+# import logging
 import numpy as np
 import warnings
 
@@ -176,11 +176,11 @@ def main():
 	optimum_training_loss = float('inf')
 	optimum_validation_loss = float('inf')
 
-	for epoch in range(40):
+	for epoch in range(200):
 		training_loss = train(model, criterion, optimizer, train_loader, device)
 		validation_loss = test(model, criterion, validation_loader, device, validation=True)
 		print(f'training loss: {training_loss}, validation loss:{validation_loss}')
-		if training_loss < optimum_training_loss and validation_loss < optimum_validation_loss:
+		if validation_loss < optimum_validation_loss:
 			optimum_validation_loss = validation_loss
 			optimum_training_loss = training_loss
 			torch.save(model.state_dict(), "../models/2D_mnist_mlp_trial_28" + ".pt")
