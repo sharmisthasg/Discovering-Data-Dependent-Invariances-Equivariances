@@ -1,0 +1,7 @@
+CNN Baseline:
+Test score: 0.88681640625
+Epochs: 240
+
+MLP:
+Test score: 0.24
+Epochs:40
