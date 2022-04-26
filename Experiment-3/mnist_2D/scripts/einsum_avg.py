@@ -191,6 +191,7 @@ def main():
 	optimum_training_loss = float('inf')
 	optimum_validation_loss = float('inf')
 
+	model.load_state_dict(torch.load("../models/2D_mnist_mlp_trial_14avg" + ".pt"))
 	for epoch in range(500):
 		training_loss = train(model, criterion, optimizer, train_loader, device)
 		validation_loss = test(model, criterion, validation_loader, device, validation=True)
