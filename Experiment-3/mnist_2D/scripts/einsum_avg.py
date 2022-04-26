@@ -16,25 +16,25 @@ import Load_static_augmented_dataset
 class MLP(torch.nn.Module):
 	def __init__(self):
 		super(MLP, self).__init__()
-		weight1 = torch.randn(28, 28, 56, 56)
+		weight1 = torch.randn(14, 14, 56, 56)
 		self.weight1 = torch.nn.Parameter(weight1)
-		weight2 = torch.randn(28, 28, 56, 56)
+		weight2 = torch.randn(14, 14, 56, 56)
 		self.weight2 = torch.nn.Parameter(weight2)
-		weight3 = torch.randn(28, 28, 56, 56)
+		weight3 = torch.randn(14, 14, 56, 56)
 		self.weight3 = torch.nn.Parameter(weight3)
-		weight4 = torch.randn(28, 28, 56, 56)
+		weight4 = torch.randn(14, 14, 56, 56)
 		self.weight4 = torch.nn.Parameter(weight4)
-		weight5 = torch.randn(28, 28, 56, 56)
+		weight5 = torch.randn(14, 14, 56, 56)
 		self.weight5 = torch.nn.Parameter(weight5)
-		weight6 = torch.randn(28, 28, 56, 56)
+		weight6 = torch.randn(14, 14, 56, 56)
 		self.weight6 = torch.nn.Parameter(weight6)
-		weight7 = torch.randn(28, 28, 56, 56)
+		weight7 = torch.randn(14, 14, 56, 56)
 		self.weight7 = torch.nn.Parameter(weight7)
-		weight8 = torch.randn(28, 28, 56, 56)
+		weight8 = torch.randn(14, 14, 56, 56)
 		self.weight8 = torch.nn.Parameter(weight8)
-		weight9 = torch.randn(28, 28, 56, 56)
+		weight9 = torch.randn(14, 14, 56, 56)
 		self.weight9 = torch.nn.Parameter(weight9)
-		weight10 = torch.randn(28, 28, 56, 56)
+		weight10 = torch.randn(14, 14, 56, 56)
 		self.weight10 = torch.nn.Parameter(weight10)
 
 	def forward(self, x):
@@ -122,8 +122,8 @@ def custom_loss_fn(model, criterion, y_pred, y, hp=1e-4):
 			   model.weight8, model.weight9, model.weight10]
 	total_diff = 0
 
-	count = 28 * 28
-	offset = 28
+	count = 14 * 14
+	offset = 14
 	subset = count // offset
 	for c in range(10):
 		start = np.random.randint(0, count - 1)
@@ -198,9 +198,9 @@ def main():
 		if validation_loss < optimum_validation_loss:
 			optimum_validation_loss = validation_loss
 			optimum_training_loss = training_loss
-			torch.save(model.state_dict(), "../models/2D_mnist_mlp_trial_28avg" + ".pt")
+			torch.save(model.state_dict(), "../models/2D_mnist_mlp_trial_14avg" + ".pt")
 
-	model.load_state_dict(torch.load("../models/2D_mnist_mlp_trial_28avg" + ".pt"))
+	model.load_state_dict(torch.load("../models/2D_mnist_mlp_trial_14avg" + ".pt"))
 	accuracy = test(model, criterion, test_loader, device, validation=False)
 	print(f'Test score: {sum(accuracy) / len(accuracy)}')
 
