@@ -30,7 +30,7 @@ class CustomModel(torch.nn.Module):
 
     def forward(self, x):
         layer_1_output = self.relu(self.linear_layer_1(x))
-        layer_2_output = self.relu(self.linear_layer_2(x))
+        layer_2_output = self.linear_layer_2(x)
         layer_3_output = torch.nn.functional.softmax(layer_2_output, dim=1)
         return layer_3_output
 
