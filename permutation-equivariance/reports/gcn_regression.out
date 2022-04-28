@@ -1,0 +1,107 @@
+Device: cpu
+Starting to prepare training data
+Starting to prepare testing data
+Created data array
+Training begins
+Epoch 0
+Training loss for epoch 0 is 1551.4821325540543
+Epoch 1
+Training loss for epoch 1 is 1037.9266933500767
+Epoch 2
+Training loss for epoch 2 is 916.8677152097225
+Epoch 3
+Training loss for epoch 3 is 873.0186000168324
+Epoch 4
+Training loss for epoch 4 is 856.3577181994915
+Epoch 5
+Training loss for epoch 5 is 849.3673672527075
+Epoch 6
+Training loss for epoch 6 is 845.3205850273371
+Epoch 7
+Training loss for epoch 7 is 842.4569309204817
+Epoch 8
+Training loss for epoch 8 is 840.1146817803383
+Epoch 9
+Training loss for epoch 9 is 838.2152061760426
+Epoch 10
+Training loss for epoch 10 is 836.6530846953392
+Epoch 11
+Training loss for epoch 11 is 835.103717982769
+Epoch 12
+Training loss for epoch 12 is 833.615395873785
+Epoch 13
+Training loss for epoch 13 is 832.250628978014
+Epoch 14
+Training loss for epoch 14 is 831.0846094340086
+Epoch 15
+Training loss for epoch 15 is 830.0702506750822
+Epoch 16
+Training loss for epoch 16 is 828.9782571047544
+Epoch 17
+Training loss for epoch 17 is 827.9611110240221
+Epoch 18
+Training loss for epoch 18 is 827.163296803832
+Epoch 19
+Training loss for epoch 19 is 826.2934903651476
+Epoch 20
+Training loss for epoch 20 is 825.5632288902998
+Epoch 21
+Training loss for epoch 21 is 824.9096420109272
+Epoch 22
+Training loss for epoch 22 is 824.2263945043087
+Epoch 23
+Training loss for epoch 23 is 823.4920366108418
+Epoch 24
+Training loss for epoch 24 is 823.164297863841
+Epoch 25
+Training loss for epoch 25 is 822.5743170380592
+Epoch 26
+Training loss for epoch 26 is 822.0735048502684
+Epoch 27
+Training loss for epoch 27 is 821.7009415179491
+Epoch 28
+Training loss for epoch 28 is 821.4433052092791
+Epoch 29
+Training loss for epoch 29 is 821.2327598333359
+Epoch 30
+Training loss for epoch 30 is 820.9478883892298
+Epoch 31
+Training loss for epoch 31 is 820.6737670600414
+Epoch 32
+Training loss for epoch 32 is 820.6753594875336
+Epoch 33
+Training loss for epoch 33 is 820.3253644555807
+Epoch 34
+Training loss for epoch 34 is 820.2627386897802
+Epoch 35
+Training loss for epoch 35 is 819.8769051134586
+Epoch 36
+Training loss for epoch 36 is 819.7664335817099
+Epoch 37
+Training loss for epoch 37 is 819.801676467061
+Epoch 38
+Training loss for epoch 38 is 819.6395293325186
+Epoch 39
+Training loss for epoch 39 is 819.4085694253445
+Epoch 40
+Training loss for epoch 40 is 819.3459624052048
+Epoch 41
+Training loss for epoch 41 is 819.2829761654139
+Epoch 42
+Training loss for epoch 42 is 819.3237513005733
+Epoch 43
+Training loss for epoch 43 is 819.2064373195171
+Epoch 44
+Training loss for epoch 44 is 819.1409215778112
+Epoch 45
+Training loss for epoch 45 is 819.1536445766687
+Epoch 46
+Training loss for epoch 46 is 818.9719586968422
+Epoch 47
+Training loss for epoch 47 is 818.9904148131609
+Epoch 48
+Training loss for epoch 48 is 818.9892196655273
+Epoch 49
+Training loss for epoch 49 is 818.9381581693888
+testing begins
+Accuracy: 0.5687
