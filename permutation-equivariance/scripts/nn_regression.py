@@ -4,6 +4,9 @@ import itertools
 import pandas as pd
 
 hps = [100, 10, 1, 0, 1e-2, 1e-3, 1e-4, 1e-5]
+
+def accuracy(a, b):
+    return (a==b).sum().item()/torch.numel(a)
 def f(a):
     return abs(a[0] - a[1])
 def custom_loss_fn(criterion, y_pred, y, hp, linear_layers):
@@ -51,11 +54,11 @@ model = model.float()
 linear_layers = [layer for layer in model.children() if isinstance(layer, torch.nn.Linear)]
 criterion = torch.nn.L1Loss(reduction='mean')  # loss function
 optimizer = torch.optim.Adam(model.parameters(), lr=lr)  # optimizer
-best_val_loss = float('inf')
+best_val_acc = 0
 best_hp = 1
-torch.save(model.state_dict(), "../models/one_hidden_layer/fixed_last/untrained.pt")
+torch.save(model.state_dict(), "../models/one_hidden_layer/fixed_last/nn_regression_untrained.pt")
 for hp in hps:
-    model.load_state_dict(torch.load("../models/one_hidden_layer/fixed_last/untrained.pt"))
+    model.load_state_dict(torch.load("../models/one_hidden_layer/fixed_last/nn_regression_untrained.pt"))
     model.train()
     best_training_loss = float('inf')
     for epoch in range(1000):
@@ -66,24 +69,26 @@ for hp in hps:
         optimizer.zero_grad()  # reset gradients
         if loss.item() < best_training_loss:
             best_training_loss = loss.item()
-            torch.save(model.state_dict(), "../models/one_hidden_layer/fixed_last/best_training_" + str(hp) + ".pt")
+            torch.save(model.state_dict(), "../models/one_hidden_layer/fixed_last/nn_regression_best_training_" + str(hp) + ".pt")
     print("Best training loss for hp = " + str(hp) + " is " + str(best_training_loss))
-    model.load_state_dict(torch.load("../models/one_hidden_layer/fixed_last/best_training_" + str(hp) + ".pt"))
+    model.load_state_dict(torch.load("../models/one_hidden_layer/fixed_last/nn_regression_best_training_" + str(hp) + ".pt"))
     model.eval()
     with torch.no_grad():
         print("Layer 1 parameters of the best model are: ", [x.data for x in model.parameters()][0])
         val_preds = model(X_val)
-        eval_metric = criterion(val_preds, Y_val).item()
-        print("Validation evaluation loss on best model for hp = " + str(hp) + " is " + str(eval_metric))
-        if eval_metric < best_val_loss:
-            best_val_loss = eval_metric
+        #eval_metric = criterion(val_preds, Y_val).item()
+        eval_metric = accuracy(Y_val, torch.clamp(torch.round(val_preds).float(), min=0, max=D-1))
+        print("Validation accuracy on best model for hp = " + str(hp) + " is " + str(eval_metric))
+        if eval_metric > best_val_acc:
+            best_val_acc = eval_metric
             best_hp = hp
-            torch.save(model.state_dict(), "../models/one_hidden_layer/fixed_last/best_validation.pt")
-model.load_state_dict(torch.load("../models/one_hidden_layer/fixed_last/best_validation.pt"))
+            torch.save(model.state_dict(), "../models/one_hidden_layer/fixed_last/nn_regression_best_validation.pt")
+model.load_state_dict(torch.load("../models/one_hidden_layer/fixed_last/nn_regression_best_validation.pt"))
 print("Best layer 1 validation model parameters:", [x.data for x in model.parameters()][0])
 print("Best hyperparameter is:", best_hp)
 model.eval()
 with torch.no_grad():
     test_preds = model(X_test)
-    test_eval_loss = criterion(test_preds, Y_test).item()
-    print("Test loss of best validation model is", test_eval_loss)
+    #test_eval_loss = criterion(test_preds, Y_test).item()
+    test_accuracy = accuracy(Y_test, torch.clamp(torch.round(test_preds).float(), min=0, max=D-1))
+    print("Test accuracy of best validation model is", test_accuracy)
