@@ -26,10 +26,10 @@ class CustomModel(torch.nn.Module):
         super(CustomModel, self).__init__()
         self.linear_layer_1 = torch.nn.Linear(D, D, bias=False)
         self.linear_layer_2 = torch.nn.Linear(D, D, bias=False)
-        self.relu = torch.nn.ReLU()
+        self.tanh = torch.nn.Tanh()
 
     def forward(self, x):
-        layer_1_output = self.relu(self.linear_layer_1(x))
+        layer_1_output = self.tanh(self.linear_layer_1(x))
         layer_2_output = self.linear_layer_2(x)
         layer_3_output = torch.nn.functional.softmax(layer_2_output, dim=1)
         return layer_3_output
